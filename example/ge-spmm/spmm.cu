@@ -25,8 +25,7 @@ int main(int argc, const char **argv) {
   //   return EXIT_FAILURE;
   // }
   if (argc < 3) {
-    printf("Require command-line argument: name of the sparse matrix file in "
-           ".mtx format.\n");
+    printf("Arguments are n and nnz for nxn * nxf SpMM\n");
     return EXIT_FAILURE;
   }
 
