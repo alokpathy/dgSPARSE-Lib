@@ -39,7 +39,7 @@ def get_extensions():
             '-lm',
             '-ldl',
         ]
-        extra_link_args += ['-lcusparse'] if suffix == 'cuda' else []
+        extra_link_args += ['-L/opt/nvidia/hpc_sdk/Linux_x86_64/23.9/cuda/12.2/../../math_libs/12.2/targets/x86_64-linux/lib/ -lcusparse'] if suffix == 'cuda' else []
 
         if suffix == 'cuda':
             define_macros += [('WITH_CUDA', None)]

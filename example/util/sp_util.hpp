@@ -173,21 +173,21 @@ void read_mtx_file(const char *filename, int &nrow, int &ncol, int &nnz,
                    std::vector<int> &csr_indices_buffer) {
   FILE *f;
 
-  if ((f = fopen(filename, "r")) == NULL) {
-    printf("File %s not found", filename);
-    exit(EXIT_FAILURE);
-  }
+  // if ((f = fopen(filename, "r")) == NULL) {
+  //   printf("File %s not found", filename);
+  //   exit(EXIT_FAILURE);
+  // }
 
   MM_typecode matcode;
   // Read MTX banner
-  if (mm_read_banner(f, &matcode) != 0) {
-    printf("Could not process this file.\n");
-    exit(EXIT_FAILURE);
-  }
-  if (mm_read_mtx_crd_size(f, &nrow, &ncol, &nnz) != 0) {
-    printf("Could not process this file.\n");
-    exit(EXIT_FAILURE);
-  }
+  // if (mm_read_banner(f, &matcode) != 0) {
+  //   printf("Could not process this file.\n");
+  //   exit(EXIT_FAILURE);
+  // }
+  // if (mm_read_mtx_crd_size(f, &nrow, &ncol, &nnz) != 0) {
+  //   printf("Could not process this file.\n");
+  //   exit(EXIT_FAILURE);
+  // }
   // printf("Reading matrix %d rows, %d columns, %d nnz.\n", nrow, ncol, nnz);
 
   /// read tuples
@@ -196,22 +196,26 @@ void read_mtx_file(const char *filename, int &nrow, int &ncol, int &nnz,
   int row_id, col_id;
   float dummy;
   for (int64_t i = 0; i < nnz; i++) {
-    if (fscanf(f, "%d", &row_id) == EOF) {
+    if (false && fscanf(f, "%d", &row_id) == EOF) {
       std::cout << "Error: not enough rows in mtx file.\n";
       exit(EXIT_FAILURE);
     } else {
       fscanf(f, "%d", &col_id);
-      if (mm_is_integer(matcode) || mm_is_real(matcode)) {
-        fscanf(f, "%f", &dummy);
-      }
+      // if (mm_is_integer(matcode) || mm_is_real(matcode)) {
+      //   fscanf(f, "%f", &dummy);
+      // }
+
       // mtx format is 1-based
-      coords.push_back(std::make_tuple(row_id - 1, col_id - 1));
+      // coords.push_back(std::make_tuple(row_id - 1, col_id - 1));
+      row_id = rand() % nrow;
+      col_id = rand() % ncol;
+      coords.push_back(std::make_tuple(row_id, col_id));
     }
   }
 
   /// make symmetric
 
-  if (mm_is_symmetric(matcode)) {
+  if (false && mm_is_symmetric(matcode)) {
     std::vector<std::tuple<int, int>> new_coords;
     for (auto iter = coords.begin(); iter != coords.end(); iter++) {
       int i = std::get<0>(*iter);

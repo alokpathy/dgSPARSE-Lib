@@ -17,7 +17,7 @@ CFLAGS += -O2
 endif
 
 INCLUDE = -I$(CUDA_HOME)/include -I../../include/
-LOADPATH = -L$(CUDA_HOME)/lib64
+LOADPATH = -L/opt/nvidia/hpc_sdk/Linux_x86_64/23.9/cuda/12.2/../../math_libs/12.2/targets/x86_64-linux/lib/ -L$(CUDA_HOME)/lib64
 LIBRARY = -lcudart
 
 .PHONY: exp code clean

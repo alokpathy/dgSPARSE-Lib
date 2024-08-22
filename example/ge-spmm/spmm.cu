@@ -19,7 +19,12 @@
 int main(int argc, const char **argv) {
   /// check command-line argument
 
-  if (argc < 2) {
+  // if (argc < 2) {
+  //   printf("Require command-line argument: name of the sparse matrix file in "
+  //          ".mtx format.\n");
+  //   return EXIT_FAILURE;
+  // }
+  if (argc < 3) {
     printf("Require command-line argument: name of the sparse matrix file in "
            ".mtx format.\n");
     return EXIT_FAILURE;
@@ -36,16 +41,20 @@ int main(int argc, const char **argv) {
   std::vector<int> csr_indices_buffer; // buffer for indices (column-ids) array
                                        // in CSR format
   // load sparse matrix from mtx file
+  sscanf(argv[1], "%d", &M);
+  K = M;
+  sscanf(argv[2], "%d", &nnz);
   read_mtx_file(argv[1], M, K, nnz, csr_indptr_buffer, csr_indices_buffer);
+
   printf("Finish reading matrix %d rows, %d columns, %d nnz. \nIgnore original "
          "values and use randomly generated values.\n",
          M, K, nnz);
 
   // Create GPU arrays
   int N = 128; // number of B-columns
-  if (argc > 2) {
-    N = atoi(argv[2]);
-  }
+  // if (argc > 2) {
+  //   N = atoi(argv[2]);
+  // }
   assert(
       N > 0 &&
       "second command-line argument is number of B columns, should be >0.\n");
@@ -153,7 +162,7 @@ int main(int argc, const char **argv) {
                    CUSPARSE_OPERATION_NON_TRANSPOSE, // opA
                    CUSPARSE_OPERATION_NON_TRANSPOSE, // opB
                    &alpha, csrDescr, dnMatInputDescr, &beta, dnMatOutputDescr,
-                   CUDA_R_32F, CUSPARSE_SPMM_ALG_DEFAULT, workspace);
+                   CUDA_R_32F, CUSPARSE_SPMM_CSR_ALG2, workspace);
     }
     gpu_timer.stop();
 
